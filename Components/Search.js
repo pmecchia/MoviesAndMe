@@ -4,13 +4,18 @@ import {getFilmsFromApiWithSearchedText} from '../API/TMDBApi'
 import {StyleSheet, View, TextInput, Button, Text,FlatList, ActivityIndicator } from 'react-native'
 
 class Search extends React.Component{
+  _displayDetailForFilm = (idFilm) => {
+    this.props.navigation.navigate("FilmDetail", {idFilm:idFilm})
+  }
+
   _searchFilms(){
     this.page = 0
     this.total_pages = 0
     this.setState({
-      films:[]
+      films:[],
+    }, () => {
+      this._loadFilms()
     })
-    this._loadFilms()
   }
   _displayLoading() {
     if(this.state.isLoading){
@@ -32,7 +37,7 @@ class Search extends React.Component{
         this.total_pages = data.total_pages
         this.setState({
           films : [...this.state.films, ...data.results],
-          isLoading : False
+          isLoading : false
         })
       })
     }
@@ -59,10 +64,10 @@ class Search extends React.Component{
         <FlatList
           data={this.state.films}
           keyExtractor={(item) => item.id.toString()}
-          renderItem={({item}) => <FilmItem film={item}/>}
+          renderItem={({item}) => <FilmItem film={item} displayDetailForFilm = {this._displayDetailForFilm}/>}
           onEndReachedThreshold = {0.5}
           onEndReached={()=> {
-            if (this.page<this.total_pages) {
+            if (this.page < this.total_pages) {
               this._loadFilms()
             }
           }}
@@ -75,8 +80,7 @@ class Search extends React.Component{
 
 const styles = StyleSheet.create({
   main_container: {
-    flex: 1,
-    marginTop: 50,
+    flex: 1
   },
   textinput: {
     marginLeft: 5,
