@@ -21,6 +21,18 @@ class FilmDetail extends React.Component{
   }
 
   componentDidMount(){
+    const favoriteFilmIndex = this.props.favoritesFilm.findIndex(item => item.id === this.props.navigation.state.params.idFilm)
+    if (favoriteFilmIndex !== -1){ // film déjà dans les fav donc on possède son détail stocké dans notre state global au state de notre component
+        this.setState({
+          film : this.props.favoritesFilm[favoriteFilmIndex]
+        })
+        return
+    }
+
+     //film pas dans les fav on fait appel à l'api pour récupérer le détail
+    this.setState({
+      isLoading: true
+    })
     getFilmDetailFromApi(this.props.navigation.state.params.idFilm).then(data => {
       this.setState({
         film : data,
