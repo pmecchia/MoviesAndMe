@@ -4,6 +4,7 @@ import {getFilmDetailFromApi, getImageFromApi} from '../API/TMDBApi'
 import moment from 'moment'
 import numeral from 'numeral'
 import {connect} from 'react-redux'
+import EnlargeShrink from '../Animations/EnlargeShrink'
 
 class FilmDetail extends React.Component{
 
@@ -45,7 +46,8 @@ class FilmDetail extends React.Component{
     const favoriteFilmIndex = this.props.favoritesFilm.findIndex(item => item.id === this.props.navigation.state.params.idFilm)
     if (favoriteFilmIndex !== -1){ // film déjà dans les fav donc on possède son détail stocké dans notre state global au state de notre component
         this.setState({
-          film : this.props.favoritesFilm[favoriteFilmIndex]
+          film : this.props.favoritesFilm[favoriteFilmIndex],
+          isLoading : false
         }, () => {this._updateNavigationParams()}) // Dès que le film est chargé, on met à jour les paramètres de la navigation
                                                    //pour afficher le bouton de partage
         return
@@ -99,14 +101,18 @@ class FilmDetail extends React.Component{
 
   _displayFavoriteImage(){
     var sourceImage = require('../Images/ic_favorite_border.png')
+    var shouldEnlarge = false
     if(this.props.favoritesFilm.findIndex(item => item.id === this.state.film.id) !== -1){
       sourceImage = require('../Images/ic_favorite.png')
+      shouldEnlarge = true
     }
     return(
-      <Image
-        source={sourceImage}
-        style={styles.favorite_image}
-      />
+      <EnlargeShrink shouldEnlarge={shouldEnlarge}>
+        <Image
+          source={sourceImage}
+          style={styles.favorite_image}
+        />
+      </EnlargeShrink>
     )
   }
 
@@ -176,8 +182,9 @@ const styles = StyleSheet.create({
     width : 30
   },
   favorite_image:{
-    height : 40,
-    width  : 40
+    flex : 1,
+    height : null,
+    width  : null
   },
   favorite_container :{
     alignItems: 'center'
@@ -190,6 +197,7 @@ const styles = StyleSheet.create({
   },
   title_text:{
     flex : 1,
+    flexWrap: 'wrap',
     textAlign : 'center',
     fontWeight : 'bold',
     fontSize : 30,
@@ -198,8 +206,6 @@ const styles = StyleSheet.create({
     marginBottom : 10
   },
   description_text:{
-    flex : 3,
-    textAlign : 'left',
     fontStyle : 'italic',
     color : '#666666',
     margin: 5,
