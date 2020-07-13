@@ -1,5 +1,4 @@
 import React from 'react'
-//import FilmItem from './FilmItem'
 import FilmList from './FilmList'
 import {getFilmsFromApiWithSearchedText} from '../API/TMDBApi'
 import {StyleSheet, View, TextInput, Button, Text,FlatList, ActivityIndicator } from 'react-native'
