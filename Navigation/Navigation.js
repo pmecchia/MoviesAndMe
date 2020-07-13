@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from "react-navigation-tabs"
 import Search from '../Components/Search'
 import FilmDetail from '../Components/FilmDetail'
 import Favorites from '../Components/Favorites'
+import News from '../Components/News'
 import React from 'react'
 import {StyleSheet,Image} from 'react-native'
 
@@ -25,6 +26,19 @@ const FavoritesStackNavigator = createStackNavigator({
     screen: Favorites,
     navigationOptions : {
       title: 'Favoris'
+    }
+  },
+  FilmDetail: {
+    screen : FilmDetail
+
+  }
+})
+
+const NewsStackNavigator = createStackNavigator({
+  News: {
+    screen: News,
+    navigationOptions : {
+      title: 'Les Derniers Films'
     }
   },
   FilmDetail: {
@@ -60,7 +74,22 @@ const MoviesTabNavigator = createBottomTabNavigator(
           )
         }
       }
+    },
+    News: {
+      screen: NewsStackNavigator,
+      navigationOptions: {
+        tabBarIcon: () => {
+          return(
+            <Image
+              source={require('../Images/ic_fiber_new.png')}
+              style={styles.icon}
+            />
+          )
+        }
+      }
     }
+
+
   },
   {
     tabBarOptions: {
